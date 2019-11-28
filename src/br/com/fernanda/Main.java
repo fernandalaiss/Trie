@@ -7,10 +7,22 @@ public class Main {
     public static void main(String[] args) {
 
         Trie arvore = new Trie();
-        arvore.inserirPalavra("oi");
-        //arvore.printTrie();
-        boolean existe = arvore.checarPalavra("oi");
-        System.out.println(existe);
+        arvore.inserirPalavra("ama");
+        arvore.inserirPalavra("amar");
+        arvore.inserirPalavra("ame");
+        arvore.inserirPalavra("america");
+        arvore.inserirPalavra("americana");
+        arvore.inserirPalavra("eu");
+        arvore.inserirPalavra("ele");
+        arvore.checarPalavra("ama");
+        arvore.checarPalavra("amar");
+        arvore.checarPalavra("ame");
+        arvore.checarPalavra("eu");
+        arvore.checarPalavra("ele");
+
+        arvore.buscarPalavrasPorPrefixo("am", 2);
+
+        //arvore.removerPalavra("amar");
 
     }
 }

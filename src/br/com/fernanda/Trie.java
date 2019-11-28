@@ -1,9 +1,9 @@
 package br.com.fernanda;
 
-import java.util.List;
+import java.util.*;
 
 public class Trie {
-    private TrieNode root;
+    TrieNode root;
 
     Trie(){
         root = new TrieNode();
@@ -14,46 +14,82 @@ public class Trie {
         for (int i = 0; i < palavra.length(); i++) {
             String letra = palavra.substring(i,i+1);
 
-            if(!node.isChild(letra)){
+            if(node.isChild(letra)){
+                node = node.getChild(letra);
+            }else{
                 node = node.setChildren(letra); // retorna novo nó de inserção
                 if(i == palavra.length() - 1)
                     node.setIsWord(true);
             }
         }
     }
-
-    public boolean checarPalavra(String palavra){
+    public TrieNode checarPrefixo(String prefixo){
         TrieNode node = root;
-        for(int i = 0; i < palavra.length(); i++){
-            String letra = palavra.substring(i,i+1);
+        for(int i = 0; i < prefixo.length(); i++){
+            String letra = prefixo.substring(i,i+1);
 
             if(node.isChild(letra)){
                 node = node.getChild(letra);
-                if(i == palavra.length()-2 && node.isWord()){
-                    System.out.println("Palavra \""+palavra+"\" existe na árvore.");
-                    return true;
-                }
             }else{
-                System.out.println("Palavra \""+palavra+"\" não existe na árvore.");
-                System.out.println("Letra: "+letra+"\nÍndice: "+i);
-                return false;
+                return null;
             }
+        }
+        return node;
+    }
+
+    public void checarPalavra(String palavra){
+        TrieNode node = checarPrefixo(palavra);
+        if(node == null){
+            System.out.println("Palavra \""+palavra+"\" não existe na árvore.");
+        }else if(node.isWord()){
+            System.out.println("Palavra \""+palavra+"\" existe na árvore.");
         }
     }
 
-    public void removerPalavra(){
-
+    public List<String> getPalavras(List<String> lista, TrieNode node, String prefixo){
+        if(node.isWord())
+            lista.add(prefixo);
+        for (String letra : node.getChildren().keySet()) {
+            lista = getPalavras(lista, node.getChild(letra), prefixo.concat(letra));
+        }
+        return lista;
     }
 
-    public String buscarPalavrasPorPrefixo(String prefixo){
-        return "não há palavras cadastradas";
+    public void buscarPalavrasPorPrefixo(String prefixo, int maxResultados){
+        List<String> lista = new ArrayList<>();
+
+        TrieNode node = checarPrefixo(prefixo);
+
+        if(node != null){
+            lista = getPalavras(lista, node, prefixo);
+
+            if(lista.isEmpty()){
+                System.out.println("Não há palavras com o prefixo \""+prefixo+"\".");
+            }else{
+                if(maxResultados != -1){
+                    lista = lista.subList(0, maxResultados);
+                }
+                System.out.println("Palavras com o prefixo \""+prefixo+"\" ("+lista.size()+" registros):");
+                for (String palavra : lista) {
+                    System.out.println(palavra);
+                }
+            }
+        }else{
+            System.out.println("O prefixo \""+prefixo+"\" não existe na árvore.");
+        }
     }
 
-    public String buscarPalavrasPorPrefixo(String prefixo, int maxResultados){
-        return "não há palavras cadastradas";
+    public void buscarPalavrasPorPrefixo(String prefixo){
+        buscarPalavrasPorPrefixo(prefixo, -1);
     }
 
-    public void printTrie(){
-        System.out.println(root.printChildren());
-    }
+    /*public void removerPalavra(String palavra){
+        TrieNode node = checarPrefixo(palavra);
+        if(node != null){
+            if()
+        }else{
+            System.out.println("Palavra \""+palavra+"\" não existe na árvore.");
+        }
+    }*/
+
 }
