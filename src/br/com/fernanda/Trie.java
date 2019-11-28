@@ -83,13 +83,26 @@ public class Trie {
         buscarPalavrasPorPrefixo(prefixo, -1);
     }
 
-    /*public void removerPalavra(String palavra){
+    public void removerPalavra(String palavra){
         TrieNode node = checarPrefixo(palavra);
         if(node != null){
-            if()
+
+            int tam_palavra = palavra.length();
+            while(palavra.length()>0){
+                node = checarPrefixo(palavra);
+
+                if(tam_palavra == palavra.length() && node.isWord()){
+                    node.setIsWord(false);
+                }
+                if(node.getChildren().isEmpty()){
+                    node = null;
+                }
+
+                palavra = palavra.substring(0,palavra.length()-1);
+            }
         }else{
             System.out.println("Palavra \""+palavra+"\" não existe na árvore.");
         }
-    }*/
+    }
 
 }
