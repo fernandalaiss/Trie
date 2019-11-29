@@ -1,40 +1,36 @@
 package br.com.fernanda;
 
-import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        String arquivo = args[0];
+        String prefixo = args[1];
+        String quantidade = "-1";
+        if(args.length > 2){
+            quantidade = args[2];
+        }
 
         Trie arvore = new Trie();
 
-        arvore.inserirPalavra("ama");
-        arvore.inserirPalavra("amar");
-        arvore.inserirPalavra("ame");
-        arvore.inserirPalavra("america");
-        arvore.inserirPalavra("americana");
-        arvore.inserirPalavra("eu");
-        arvore.inserirPalavra("ele");
+        try {
+            FileReader ler = new FileReader("arquivos/"+arquivo);
+            BufferedReader reader = new BufferedReader(ler);
+            String linha;
+            while( (linha = reader.readLine()) != null ){
+                arvore.inserirPalavra(linha);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        System.out.println("checando");
-        arvore.checarPalavra("ama");
-        arvore.checarPalavra("amar");
-        arvore.checarPalavra("ame");
-        arvore.checarPalavra("america");
+        arvore.buscarPalavrasPorPrefixo(prefixo, Integer.parseInt(quantidade));
+
+        arvore.removerPalavra("americana");
+
         arvore.checarPalavra("americana");
-
-        System.out.println("buscando");
-        arvore.buscarPalavrasPorPrefixo("ool", 2);
-
-        System.out.println("removendo");
-        arvore.removerPalavra("amora");
-
-        System.out.println("checando");
-        arvore.checarPalavra("ama");
-        arvore.checarPalavra("amar");
-        arvore.checarPalavra("ame");
-        arvore.checarPalavra("america");
-        arvore.checarPalavra("americana");
-
     }
 }

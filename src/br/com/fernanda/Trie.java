@@ -1,6 +1,8 @@
 package br.com.fernanda;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class Trie {
     TrieNode root;
@@ -39,10 +41,10 @@ public class Trie {
 
     public void checarPalavra(String palavra){
         TrieNode node = checarPrefixo(palavra);
-        if(node == null){
-            System.out.println("Palavra \""+palavra+"\" não existe na árvore.");
-        }else if(node.isWord()){
+        if(node.isWord()){
             System.out.println("Palavra \""+palavra+"\" existe na árvore.");
+        }else{
+            System.out.println("Palavra \""+palavra+"\" não existe na árvore.");
         }
     }
 
@@ -66,7 +68,16 @@ public class Trie {
             if(lista.isEmpty()){
                 System.out.println("Não há palavras com o prefixo \""+prefixo+"\".");
             }else{
+                Collections.sort(lista, new Comparator<String>() {
+                    @Override
+                    public int compare(String s, String t1) {
+                        if(s.length() > t1.length())
+                            return 1;
+                        return -1;
+                    }
+                });
                 if(maxResultados != -1){
+                    maxResultados = Math.min(maxResultados, lista.size());
                     lista = lista.subList(0, maxResultados);
                 }
                 System.out.println("Palavras com o prefixo \""+prefixo+"\" ("+lista.size()+" registros):");
@@ -87,6 +98,7 @@ public class Trie {
         TrieNode node = checarPrefixo(palavra);
         if(node != null){
 
+            System.out.println("Palavra \""+palavra+"\" removida da árvore.");
             int tam_palavra = palavra.length();
             while(palavra.length()>0){
                 node = checarPrefixo(palavra);
